@@ -49,14 +49,14 @@ public class FLDDynamicAppIconModule extends ReactContextBaseJavaModule {
       List<String> disableNames = new ArrayList<String>();
 
       for (String candidateIconName : iconNames) {
-        if (candidateIconName == iconName) {
+        if (candidateIconName.equals(iconName)) {
           activeName = iconName;
         } else {
           disableNames.add(candidateIconName);
         }
       }
 
-      if (activeName == "") {
+      if (activeName.isEmpty()) {
         return;
       }
 
