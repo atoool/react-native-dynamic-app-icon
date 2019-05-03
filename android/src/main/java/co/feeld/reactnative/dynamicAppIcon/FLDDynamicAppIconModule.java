@@ -23,7 +23,7 @@ public class FLDDynamicAppIconModule extends ReactContextBaseJavaModule {
 
     @Override
     public String getName() {
-        return "FLDDynamicAppIconModule";
+      return "RNDynamicAppIcon";
     }
 
     @ReactMethod
