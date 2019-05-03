@@ -23,7 +23,7 @@ public class FLDDynamicAppIconModule extends ReactContextBaseJavaModule {
 
     @Override
     public String getName() {
-      return "RNDynamicAppIcon";
+        return "RNDynamicAppIcon";
     }
 
     @ReactMethod
@@ -60,10 +60,10 @@ public class FLDDynamicAppIconModule extends ReactContextBaseJavaModule {
         return;
       }
 
-      new AppIconNameChanger.Builder(MainActivity.this)
+      new AppIconNameChanger.Builder(this.reactContext.getCurrentActivity())
         .activeName(activeName) // String
         .disableNames(disableNames) // List<String>
-        .packageName(BuildConfig.APPLICATION_ID)
+        .packageName(this.reactContext.getPackageName())
         .build()
         .setNow();
     }
