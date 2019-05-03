@@ -37,7 +37,7 @@ public class FLDDynamicAppIconModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void setAlternateIconName(String iconName) {
+    public void setAppIcon(String iconName) {
       if (iconNames == null || iconNames.size() == 0) {
         return;
       }
