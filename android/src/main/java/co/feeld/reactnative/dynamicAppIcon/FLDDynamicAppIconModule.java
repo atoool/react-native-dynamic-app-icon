@@ -18,6 +18,7 @@ public class FLDDynamicAppIconModule extends ReactContextBaseJavaModule {
     public FLDDynamicAppIconModule(ReactApplicationContext reactContext) {
         super(reactContext);
         this.reactContext = reactContext;
+        this.iconNames = new ArrayList<>();
     }
 
     @Override
@@ -30,7 +31,9 @@ public class FLDDynamicAppIconModule extends ReactContextBaseJavaModule {
       if (iconNames == null) {
         return;
       }
-      this.iconNames = iconNames.toArrayList();
+      for(Object objectUncastedIconName: iconNames.toArrayList()) {
+          this.iconNames.add((String)objectUncastedIconName);
+      }
     }
 
     @ReactMethod
