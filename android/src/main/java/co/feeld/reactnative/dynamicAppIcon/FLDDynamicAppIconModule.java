@@ -1,5 +1,9 @@
 package co.feeld.reactnative.dynamicAppIcon;
 
+import android.content.Context;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+
 import in.myinnos.library.AppIconNameChanger;
 
 import java.util.List;
@@ -13,6 +17,7 @@ import com.facebook.react.bridge.ReadableArray;
 
 public class FLDDynamicAppIconModule extends ReactContextBaseJavaModule {
     private final ReactApplicationContext reactContext;
+    private final String ACTIVE_ICON_NAME = "ACTIVE_ICON_NAME";
 
     private ArrayList<String> iconNames;
 
@@ -29,19 +34,68 @@ public class FLDDynamicAppIconModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void supportsDynamicAppIcon(Promise promise) {
-      // Activity aliases were introduced on API 1 so this should be available for everyone
-      // https://developer.android.com/guide/topics/manifest/activity-alias-element
-      promise.resolve(true);
+        if (iconNames.isEmpty()) {
+            promise.reject(new Exception("Icon names must be set first"));
+            return;
+        }
+
+        // Activity aliases were introduced on API 1 so this should be available for everyone
+        // https://developer.android.com/guide/topics/manifest/activity-alias-element
+        promise.resolve(true);
     }
 
     @ReactMethod
-    public void defineAllIconNames(ReadableArray iconNames) {
-      if (iconNames == null) {
-        return;
+    public void configure(ReadableArray iconNames, Promise promise) {
+
+        try {
+            String activeIconName = getCurrentActivityAliasName();
+            defineAllIconNames(iconNames);
+
+            if(!iconNames.toArrayList().contains(activeIconName)){
+                promise.reject(new Exception("Default icon is not on the list: " + activeIconName));
+            }
+
+            persistActiveIconName(activeIconName);
+
+            promise.resolve(true);
+        } catch(Exception e) {
+            promise.reject(e);
+        }
+    }
+
+    private String getCurrentActivityAliasName() throws PackageManager.NameNotFoundException {
+        ActivityInfo activityInfo = reactContext.getPackageManager().getActivityInfo(
+                reactContext.getCurrentActivity().getComponentName(), PackageManager.GET_META_DATA);
+        return activityInfo.name;
+    }
+
+    private void persistActiveIconName(String activeIconName)  {
+        reactContext.getSharedPreferences(reactContext.getApplicationInfo().name, Context.MODE_PRIVATE)
+                .edit()
+                .putString(ACTIVE_ICON_NAME, activeIconName)
+                .apply();
+    }
+
+    private void defineAllIconNames(ReadableArray iconNames) throws Exception {
+      if (iconNames == null || iconNames.toArrayList().isEmpty()) {
+        throw new Exception("Icon names cannot be null or empty");
       }
       for(Object objectUncastedIconName: iconNames.toArrayList()) {
           this.iconNames.add((String)objectUncastedIconName);
       }
+    }
+
+    @ReactMethod
+    public void getActiveIconName(Promise promise) {
+        if (iconNames.isEmpty()) {
+            promise.reject(new Exception("Module not initialized, call the configure method first."));
+            return;
+        }
+
+        String activeIconName = reactContext
+                .getSharedPreferences(reactContext.getApplicationInfo().name, Context.MODE_PRIVATE)
+                .getString(ACTIVE_ICON_NAME, iconNames.get(0));
+        promise.resolve(activeIconName);
     }
 
     @ReactMethod
@@ -74,5 +128,6 @@ public class FLDDynamicAppIconModule extends ReactContextBaseJavaModule {
         .packageName(this.reactContext.getPackageName())
         .build()
         .setNow();
+      persistActiveIconName(activeName);
     }
 }

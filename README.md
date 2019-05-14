@@ -109,9 +109,11 @@ On the JS side:
 import AppIcon from 'react-native-dynamic-app-icon';
 
 // Set the available icons
-AppIcon.defineAllIconNames(['.Default', '.IconA', '.IconB'])
+AppIcon.configure(['.Default', '.IconA', '.IconB']).then(() =>
+  // Change the icon
+  AppIcon.setAppIcon('.IconA')
+);
 
-AppIcon.setAppIcon('.IconA');
 ```
 
 
@@ -121,9 +123,17 @@ AppIcon.setAppIcon('.IconA');
 
 To change the app icon call this method with one of the alternate app icons keys specified in your `plist.info`. To reset to the default app icon pass `null`.
 
+### getActiveIconName(): Promise\<string\>
+
+To retrieve the current active alternative icon name.
+
 ### supportsDynamicAppIcon()
 
 Returns a promise which resolves to a boolean.
+
+### configure(alternativeIcons: string[]): Promise\<bool\> (Only Android)
+
+Sets the available alternative icons for the Android app. The icons must be set as a group of [`activity-alias`](https://developer.android.com/guide/topics/manifest/activity-alias-element) on the `AndroidManifest.xml` file.
 
 ## License
 
