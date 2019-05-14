@@ -80,6 +80,41 @@ import AppIcon from 'react-native-dynamic-app-icon';
 AppIcon.setAppIcon('alternate');
 ```
 
+### Android
+
+On your `AndroidManifest.xml` file, add the activity aliases for the different icons.
+
+```xml
+<activity android:name=".MainActivity" />
+
+<activity-alias
+  android:name=".Default"
+  android:icon="@mipmap/ic_default"
+  android:targetActivity=".MainActivity" />
+
+<activity-alias
+  android:name=".IconA"
+  android:icon="@mipmap/ic_default"
+  android:targetActivity=".MainActivity" />
+
+<activity-alias
+  android:name=".IconB"
+  android:icon="@mipmap/ic_default"
+  android:targetActivity=".MainActivity" />
+```
+
+On the JS side:
+
+```javascript
+import AppIcon from 'react-native-dynamic-app-icon';
+
+// Set the available icons
+AppIcon.defineAllIconNames(['.Default', '.IconA', '.IconB'])
+
+AppIcon.setAppIcon('.IconA');
+```
+
+
 ## Api
 
 ### setAppIcon(key: string)
