@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReadableArray;
 
 public class FLDDynamicAppIconModule extends ReactContextBaseJavaModule {
@@ -24,6 +25,13 @@ public class FLDDynamicAppIconModule extends ReactContextBaseJavaModule {
     @Override
     public String getName() {
         return "RNDynamicAppIcon";
+    }
+
+    @ReactMethod
+    public void supportsDynamicAppIcon(Promise promise) {
+      // Activity aliases were introduced on API 1 so this should be available for everyone
+      // https://developer.android.com/guide/topics/manifest/activity-alias-element
+      promise.resolve(true);
     }
 
     @ReactMethod
