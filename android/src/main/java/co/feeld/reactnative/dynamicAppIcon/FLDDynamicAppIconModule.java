@@ -58,6 +58,14 @@ public class FLDDynamicAppIconModule extends ReactContextBaseJavaModule {
             persistActiveIconName(activeIconName);
 
             promise.resolve(true);
+        }  catch(PackageManager.NameNotFoundException e) {
+            try {
+              defineAllIconNames(iconNames);
+              setAppIcon(this.iconNames.get(0));
+              promise.resolve(true);
+            } catch (Exception e2) {
+              promise.reject(e2);
+            }
         } catch(Exception e) {
             promise.reject(e);
         }
