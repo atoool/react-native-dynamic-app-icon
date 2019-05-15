@@ -90,17 +90,34 @@ On your `AndroidManifest.xml` file, add the activity aliases for the different i
 <activity-alias
   android:name=".Default"
   android:icon="@mipmap/ic_default"
-  android:targetActivity=".MainActivity" />
+  android:targetActivity=".MainActivity">
+  <intent-filter>
+      <action android:name="android.intent.action.MAIN"/>
+      <category android:name="android.intent.category.LAUNCHER"/>
+  </intent-filter>
+</activity-alias>
 
 <activity-alias
   android:name=".IconA"
   android:icon="@mipmap/ic_default"
-  android:targetActivity=".MainActivity" />
+  android:enabled="false"
+  android:targetActivity=".MainActivity">
+  <intent-filter>
+      <action android:name="android.intent.action.MAIN"/>
+      <category android:name="android.intent.category.LAUNCHER"/>
+  </intent-filter>
+</activity-alias>
 
 <activity-alias
   android:name=".IconB"
   android:icon="@mipmap/ic_default"
-  android:targetActivity=".MainActivity" />
+      android:enabled="false"
+  android:targetActivity=".MainActivity">
+  <intent-filter>
+      <action android:name="android.intent.action.MAIN"/>
+      <category android:name="android.intent.category.LAUNCHER"/>
+  </intent-filter>
+</activity-alias>
 ```
 
 On the JS side:
@@ -116,6 +133,8 @@ AppIcon.configure(['.Default', '.IconA', '.IconB']).then(() =>
 
 ```
 
+> *Note*: If you're activity has an intent filter with the `LAUNCHER` category,
+> you need to add the activity name on your icon list
 
 ## Api
 
