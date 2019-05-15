@@ -52,10 +52,12 @@ public class FLDDynamicAppIconModule extends ReactContextBaseJavaModule {
             defineAllIconNames(iconNames);
 
             if(!iconNames.toArrayList().contains(activeIconName)){
-                promise.reject(new Exception("Default icon is not on the list: " + activeIconName));
+              // we use the first icon as the default one
+              setAppIcon(this.iconNames.get(0));
+            }else {
+              persistActiveIconName(activeIconName);
             }
 
-            persistActiveIconName(activeIconName);
 
             promise.resolve(true);
         }  catch(PackageManager.NameNotFoundException e) {
