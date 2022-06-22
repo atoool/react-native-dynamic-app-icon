@@ -80,15 +80,79 @@ import AppIcon from 'react-native-dynamic-app-icon';
 AppIcon.setAppIcon('alternate');
 ```
 
+### Android
+
+On your `AndroidManifest.xml` file, add the activity aliases for the different icons.
+
+```xml
+<activity android:name=".MainActivity" />
+
+<activity-alias
+  android:name=".Default"
+  android:icon="@mipmap/ic_default"
+  android:targetActivity=".MainActivity">
+  <intent-filter>
+      <action android:name="android.intent.action.MAIN"/>
+      <category android:name="android.intent.category.LAUNCHER"/>
+  </intent-filter>
+</activity-alias>
+
+<activity-alias
+  android:name=".IconA"
+  android:icon="@mipmap/ic_default"
+  android:enabled="false"
+  android:targetActivity=".MainActivity">
+  <intent-filter>
+      <action android:name="android.intent.action.MAIN"/>
+      <category android:name="android.intent.category.LAUNCHER"/>
+  </intent-filter>
+</activity-alias>
+
+<activity-alias
+  android:name=".IconB"
+  android:icon="@mipmap/ic_default"
+      android:enabled="false"
+  android:targetActivity=".MainActivity">
+  <intent-filter>
+      <action android:name="android.intent.action.MAIN"/>
+      <category android:name="android.intent.category.LAUNCHER"/>
+  </intent-filter>
+</activity-alias>
+```
+
+On the JS side:
+
+```javascript
+import AppIcon from 'react-native-dynamic-app-icon';
+
+// Set the available icons
+AppIcon.configure(['.Default', '.IconA', '.IconB']).then(() =>
+  // Change the icon
+  AppIcon.setAppIcon('.IconA')
+);
+
+```
+
+> *Note*: If you're activity has an intent filter with the `LAUNCHER` category,
+> you need to add the activity name on your icon list
+
 ## Api
 
 ### setAppIcon(key: string)
 
 To change the app icon call this method with one of the alternate app icons keys specified in your `plist.info`. To reset to the default app icon pass `null`.
 
+### getActiveIconName(): Promise\<string\>
+
+To retrieve the current active alternative icon name.
+
 ### supportsDynamicAppIcon()
 
 Returns a promise which resolves to a boolean.
+
+### configure(alternativeIcons: string[]): Promise\<bool\> (Only Android)
+
+Sets the available alternative icons for the Android app. The icons must be set as a group of [`activity-alias`](https://developer.android.com/guide/topics/manifest/activity-alias-element) on the `AndroidManifest.xml` file.
 
 ## License
 

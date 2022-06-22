@@ -7,6 +7,11 @@
 
 RCT_EXPORT_MODULE()
 
+- (dispatch_queue_t)methodQueue
+{
+    return dispatch_get_main_queue();
+}
+
 RCT_EXPORT_METHOD(setAppIcon:(NSString *)name)
 {
   [[UIApplication sharedApplication] setAlternateIconName:name completionHandler:^(NSError * _Nullable error) {
@@ -14,6 +19,13 @@ RCT_EXPORT_METHOD(setAppIcon:(NSString *)name)
       RCTLog(@"%@", [error description]);
     }
   }];
+}
+
+RCT_REMAP_METHOD(getActiveIconName,
+                 getActiveIconNameWithResolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    resolve([[UIApplication sharedApplication] alternateIconName]);
 }
 
 RCT_REMAP_METHOD(supportsDynamicAppIcon, resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
